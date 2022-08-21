@@ -56,20 +56,20 @@ fn main() {
 }
 
 fn cli() -> Command<'static> {
-    Command::new("pw")
+    Command::new("pwman")
         .about("Simple CLI password manager")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
         .subcommand(
             Command::new("create")
-                .about("Creates a new app profile")
+                .about("creates a new app profile")
                 .arg_required_else_help(true)
                 .arg(Arg::new("name").id("name").action(clap::ArgAction::Set)),
         )
         .subcommand(
             Command::new("edit")
-                .about("Edits a profile")
+                .about("edits a profile")
                 .arg_required_else_help(true)
                 .arg(arg!(<NAME> ... "Profile name")),
         )
@@ -81,7 +81,7 @@ fn cli() -> Command<'static> {
         )
         .subcommand(
             Command::new("get")
-                .about("deletes a profile")
+                .about("gets information from the specified profile")
                 .arg_required_else_help(true)
                 .arg(arg!(<NAME> ... "Profile name")),
         )

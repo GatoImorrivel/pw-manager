@@ -25,3 +25,6 @@ pub fn read_line_sanitized() -> String {
 
 pub fn fetch_profiles() {
 }
+
+pub fn save_profiles() {
+}
