@@ -22,9 +22,3 @@ pub fn read_line_sanitized() -> String {
     input.pop().unwrap();
     input
 }
-
-pub fn fetch_profiles() {
-}
-
-pub fn save_profiles() {
-}
