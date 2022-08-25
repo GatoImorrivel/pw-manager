@@ -1,5 +1,7 @@
 use std::io::Write;
 
+use crate::profile::Profile;
+
 pub fn prompt_field() -> (String, String) {
     print!("Field Name: ");
     std::io::stdout().flush().unwrap();
@@ -21,4 +23,14 @@ pub fn read_line_sanitized() -> String {
 
     input.pop().unwrap();
     input
+}
+
+pub fn contains_profile_by_name(profiles: &Vec<Profile>, name: &str) -> bool {
+    for p in profiles.iter() {
+        if p.name().as_str() == name {
+            return true
+        }
+    }
+
+    false
 }

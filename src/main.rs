@@ -7,6 +7,8 @@ use std::{collections::HashMap, io::Write, path::Path};
 use profile::Profile;
 use utils::{prompt_field, read_line_sanitized};
 
+use crate::utils::contains_profile_by_name;
+
 fn main() {
     let data_path = Path::new("data.json");
 
@@ -18,11 +20,9 @@ fn main() {
             let name = sub_matches.get_one::<String>("name").unwrap().to_owned();
             let mut fields: HashMap<String, String> = HashMap::new();
 
-            for p in profiles.iter() {
-                if name.as_str() == p.name().as_str() {
-                    println!("Profile with this name already exists");
-                    return;
-                }
+            if contains_profile_by_name(&profiles, name.as_str()) {
+                println!("A profile with this name already exists.");
+                return;
             }
 
             println!("Creating new profile!");
@@ -52,8 +52,19 @@ fn main() {
         Some(("edit", _)) => {
             println!("Editing profile");
         }
-        Some(("delete", _)) => {
+        Some(("delete", sub_matches)) => {
             println!("Deleting profile");
+            let name = sub_matches.get_one::<String>("name").unwrap().to_owned();
+            if !contains_profile_by_name(&profiles, name.as_str()) {
+                println!("Profile doesnt exist");
+                return;
+            }
+
+            let (i, _) = profiles
+                .iter()
+                .enumerate()
+                .filter(|(i, p)| p.name().as_str() == name.as_str())
+                .collect();
         }
         Some(("get", _)) => {
             println!("Getting profile");
@@ -87,7 +98,7 @@ fn cli() -> Command<'static> {
             Command::new("delete")
                 .about("deletes a profile")
                 .arg_required_else_help(true)
-                .arg(arg!(<NAME> ... "Profile name")),
+                .arg(Arg::new("name").id("name").action(clap::ArgAction::Set)),
         )
         .subcommand(
             Command::new("get")

@@ -21,7 +21,7 @@ impl Profile {
     pub fn read_profiles<P: AsRef<Path>>(path: P) -> Vec<Self> {
         let file = match File::open(path) {
             Err(_why) => {
-                println!("No previous data founf, assuming no profiles");
+                println!("No previous data found, assuming no profiles");
                 return Vec::new();
             }
             Ok(file) => file,
