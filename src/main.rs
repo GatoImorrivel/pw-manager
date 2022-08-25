@@ -2,25 +2,15 @@ mod profile;
 mod utils;
 
 use clap::{arg, Arg, Command};
-use core::panic;
-use std::{collections::HashMap, fs::File, io::Write, path::Path};
+use std::{collections::HashMap, io::Write, path::Path};
 
 use profile::Profile;
 use utils::{prompt_field, read_line_sanitized};
 
 fn main() {
     let data_path = Path::new("data.json");
-    let mut file = match File::options()
-        .create(true)
-        .write(true)
-        .read(true)
-        .open(&data_path)
-    {
-        Err(why) => panic!("Couldnt create or open profiles file! {}", why),
-        Ok(file) => file,
-    };
 
-    let mut profiles = Profile::read_profiles(&file);
+    let mut profiles = Profile::read_profiles(&data_path);
     let matches = cli().get_matches();
 
     match matches.subcommand() {
@@ -30,7 +20,8 @@ fn main() {
 
             for p in profiles.iter() {
                 if name.as_str() == p.name().as_str() {
-                    panic!("Profile with this name already exists");
+                    println!("Profile with this name already exists");
+                    return;
                 }
             }
 
@@ -56,7 +47,7 @@ fn main() {
             };
 
             profiles.push(Profile::new(name, fields));
-            Profile::write_profiles(profiles, &mut file);
+            Profile::write_profiles(profiles, data_path);
         }
         Some(("edit", _)) => {
             println!("Editing profile");

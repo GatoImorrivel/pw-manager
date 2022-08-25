@@ -1,8 +1,14 @@
 [
   {
-    "name": "bolas",
+    "name": "kalani",
     "fields": {
-      "kalani": "gosto"
+      "kalani": "amo"
+    }
+  },
+  {
+    "name": "zanela",
+    "fields": {
+      "zanela": "o homem"
     }
   }
 ]
