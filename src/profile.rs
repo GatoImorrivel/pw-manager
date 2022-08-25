@@ -57,8 +57,18 @@ impl Profile {
         s
     }
 
-    pub fn get_by_name(profiles: &Vec<Profile>, name: &str) -> Option<usize> {
+    pub fn get_by_name(profiles: &[Profile], name: &str) -> Option<usize> {
         profiles.iter().position(|p| p.name().as_str() == name)
+    }
+
+    pub fn already_exists(profiles: &[Profile], name: &str) -> bool {
+        for p in profiles.iter() {
+            if p.name().as_str() == name {
+                return true;
+            }
+        }
+
+        false
     }
 }
 

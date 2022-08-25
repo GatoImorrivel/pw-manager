@@ -7,8 +7,6 @@ use std::{collections::HashMap, io::Write, path::Path};
 use profile::Profile;
 use utils::{prompt_field, read_line_sanitized};
 
-use crate::utils::contains_profile_by_name;
-
 fn main() {
     let data_path = Path::new("data.json");
 
@@ -20,7 +18,7 @@ fn main() {
             let name = sub_matches.get_one::<String>("name").unwrap().to_owned();
             let mut fields: HashMap<String, String> = HashMap::new();
 
-            if contains_profile_by_name(&profiles, name.as_str()) {
+            if Profile::already_exists(&profiles, name.as_str()) {
                 println!("A profile with this name already exists.");
                 return;
             }
