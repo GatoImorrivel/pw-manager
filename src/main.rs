@@ -60,11 +60,13 @@ fn main() {
                 return;
             }
 
-            let (i, _) = profiles
+            let i = profiles
                 .iter()
-                .enumerate()
-                .filter(|(i, p)| p.name().as_str() == name.as_str())
-                .collect();
+                .position(|p| p.name().as_str() == name.as_str())
+                .unwrap();
+
+            profiles.remove(i);
+            Profile::write_profiles(profiles, data_path);
         }
         Some(("get", _)) => {
             println!("Getting profile");
