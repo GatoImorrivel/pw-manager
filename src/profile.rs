@@ -1,6 +1,7 @@
 use std::{
     collections::HashMap,
-    fs::{File},
+    fmt::Display,
+    fs::File,
     io::{BufReader, Write},
     path::Path,
 };
@@ -46,5 +47,28 @@ impl Profile {
 
     pub fn name(&self) -> &String {
         &self.name
+    }
+
+    pub fn fields_stringfied(&self, prefix: &str) -> String {
+        let mut s = "".to_string();
+        for f in self.fields.iter() {
+            s.push_str(format!("{}{}: {}\n", prefix, &f.0, &f.1).as_str());
+        }
+        s
+    }
+
+    pub fn get_by_name(profiles: &Vec<Profile>, name: &str) -> Option<usize> {
+        profiles.iter().position(|p| p.name().as_str() == name)
+    }
+}
+
+impl Display for Profile {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "-Profile: {}\n{}",
+            self.name,
+            self.fields_stringfied("  ")
+        )
     }
 }

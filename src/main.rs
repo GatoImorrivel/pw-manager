@@ -55,24 +55,36 @@ fn main() {
         Some(("delete", sub_matches)) => {
             println!("Deleting profile");
             let name = sub_matches.get_one::<String>("name").unwrap().to_owned();
-            if !contains_profile_by_name(&profiles, name.as_str()) {
-                println!("Profile doesnt exist");
-                return;
-            }
 
-            let i = profiles
-                .iter()
-                .position(|p| p.name().as_str() == name.as_str())
-                .unwrap();
+            let i = match Profile::get_by_name(&profiles, name.as_str()) {
+                None => {
+                    println!("Can't find profile for deletion");
+                    return;
+                }
+                Some(p) => p,
+            };
 
             profiles.remove(i);
             Profile::write_profiles(profiles, data_path);
         }
-        Some(("get", _)) => {
+        Some(("get", sub_matches)) => {
             println!("Getting profile");
+
+            let name = sub_matches.get_one::<String>("name").unwrap();
+            let i = match Profile::get_by_name(&profiles, name.as_str()) {
+                None => {
+                    println!("Can't get desired profile, not found");
+                    return;
+                }
+                Some(p) => p,
+            };
+
+            println!("{}", profiles[i]);
         }
         Some(("list", _)) => {
-            println!("{:?}", profiles);
+            for p in profiles.iter() {
+                println!("{}", p);
+            }
         }
         _ => unreachable!(),
     }
@@ -106,7 +118,7 @@ fn cli() -> Command<'static> {
             Command::new("get")
                 .about("gets information from the specified profile")
                 .arg_required_else_help(true)
-                .arg(arg!(<NAME> ... "Profile name")),
+                .arg(Arg::new("name").id("name").action(clap::ArgAction::Set)),
         )
         .subcommand(Command::new("list").about("shows all profiles for a user"))
 }

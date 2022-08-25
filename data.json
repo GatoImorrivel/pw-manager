@@ -12,10 +12,11 @@
     }
   },
   {
-    "name": "bambas",
+    "name": "gui",
     "fields": {
-      "mallmanzises": "malhar",
-      "bamberguices": "odiar sorteio"
+      "idk": "idc",
+      "bangos": "bagos",
+      "gui": "teste"
     }
   }
 ]
